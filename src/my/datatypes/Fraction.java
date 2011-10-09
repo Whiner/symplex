@@ -113,6 +113,25 @@ public class Fraction {
 		return this.divideFraction(term);
 	}
 	
+	public static boolean FractionsCompare(Fraction first, Fraction second) {
+		if(first.numerator == second.numerator && first.denominator == second.denominator) {
+			return true;
+		}
+		else return false;
+	}
+	
+	public boolean fractionCompare(Fraction term) {
+		if(this.numerator == term.numerator && this.denominator == term.denominator) {
+			return true;
+		}
+		else return false;
+	}
+	
+	public boolean fractionCompare(int num) {
+		Fraction term = new Fraction(num);
+		return fractionCompare(term);
+	}
+	
 	/**
 	 * @param
 	 * @param second

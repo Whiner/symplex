@@ -10,15 +10,16 @@ public class Computer {
 	protected Fraction[] arguments;
 	protected int[] basis;
 	
-	public void init() {
+	public Computer() {
 		int[] arg = {1, 2}; //this is temporary. delete this code.
 		
-		int[][] tab = new int[2][]; //this is temporary. delete this code.
-		for(int i = 0; i < 2; i++){
+		this.table = new Fraction[2][];
+		for(int i = 0; i < 2; i++){ //this is temporary. delete this code
+			this.table[i] = new Fraction[2];
 			for(int j = 0; j < 2; j++) {
-				tab[i][j] = 0;
+				this.table[i][j] = new Fraction(0);
 			}
-			tab[i][i] = 1;
+			this.table[i][i] = new Fraction(1);
 		}
 		
 		this.arguments = new Fraction[arg.length];
@@ -31,7 +32,27 @@ public class Computer {
 	}
 	
 	public int[] initBasis(Fraction[][] table) {
-		
+		basis = new int[table.length];
+		for(int i = 0; i < table.length; i++) {
+			for(int j = 0; j < table[i].length; j++) {
+				if(table[i][j].fractionCompare(1)) {
+					//basis?
+					boolean isBasis = true;
+					for(int k = 0; k < table.length; k++) {
+						if(!table[k][j].fractionCompare(0) && k != i) {
+							//this is not the basis
+							isBasis = false;
+							break;
+						}
+					}
+					
+					if(isBasis) {
+						basis[i] = j;
+						continue;
+					}
+				}
+			}
+		}
 		return this.basis;
 	}
 }
