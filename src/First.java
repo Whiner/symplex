@@ -8,9 +8,8 @@ public class First {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Loader instance = new Loader();
 		try {
-			instance.load("E:\\text.txt");
+			Loader instance = new Loader("E:\\text.txt");
 		}
 		catch(FileNotFoundException e) {
 			System.out.println(e.getMessage());

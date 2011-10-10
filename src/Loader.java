@@ -10,7 +10,23 @@ import java.util.ArrayList;
  * @description Load a matrix from ... will use only core data types.
  */
 public class Loader {
-	public int[][] load(String path) throws FileNotFoundException, IOException {
+	private int[] function;
+	private int[][] equation;
+	private int[] finalVars;
+	
+	public int[] Function() {
+		return this.function;
+	}
+	
+	public int[][] Equation() {
+		return this.equation;
+	}
+	
+	public int[] FinalVars() {
+		return this.finalVars;
+	}
+	
+	public Loader(String path) throws FileNotFoundException, IOException {
 		File input = new File(path);
 		FileReader source = new FileReader(input);
 		BufferedReader bufRead = new BufferedReader(source);
@@ -19,15 +35,7 @@ public class Loader {
 		             
 		// Read first line
 		line = bufRead.readLine();
-		        
-		//the function reading. first line
-		String[] functionLine = line.split(" ");
-		int[] function = new int[functionLine.length];
-		for(int i = 0; i < function.length; i++) {
-			functionLine[i] = functionLine[i].trim();
-			function[i] = Integer.parseInt(functionLine[i]);
-			//System.out.println(function[i]);
-		}
+		this.function = setFunction(line);        
 		
 		ArrayList<String> rows = new ArrayList<String>();
 		ArrayList<String> finals = new ArrayList<String>();
@@ -44,35 +52,41 @@ public class Loader {
 		}
 		
 		//the worst code ever. need to optimize
+		this.equation = setEquations(rows);
+		this.finalVars = setFinalVars(finals);
+	}
+	
+	protected int[] setFunction(String line) {
+		String[] functionLine = line.split(" ");
+		int[] function = new int[functionLine.length];
+		for(int i = 0; i < function.length; i++) {
+			functionLine[i] = functionLine[i].trim();
+			function[i] = Integer.parseInt(functionLine[i]);
+		}
+		return function;
+	}
+	
+	protected int[][] setEquations(ArrayList<String> rows) {
+		int[][] equations;
 		String[] equationString = rows.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");
-		int[][] equation = new int[equationString.length][];
+		equations = new int[equationString.length][];
 		for(int i = 0; i < equationString.length; i++) {
 			String[] tmp = equationString[i].split(" ");
-			equation[i] = new int[tmp.length];
-			for(int j = 0; j < equation.length; j++) {
-				equation[i][j] = Integer.parseInt(tmp[j]);	
+			equations[i] = new int[tmp.length];
+			for(int j = 0; j < equations.length; j++) {
+				equations[i][j] = Integer.parseInt(tmp[j]);	
 			}
 		}
-		
+		return equations;
+	}
+	
+	protected int[] setFinalVars(ArrayList<String> finals) {
+		int[] finalVars;
 		String[] vars = finals.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");;
-		int[] finalVars = new int[vars.length];
+		finalVars = new int[vars.length];
 		for(int i = 0; i < finalVars.length; i++) {
 			finalVars[i] = Integer.parseInt(vars[i]);
 		}
-		
-		//small test
-		{
-			for(int i = 0; i < function.length; i++) {
-				System.out.print(function[i] + " ");	
-			}
-			System.out.println();
-			for(int i = 0; i < equation.length; i++) {
-				for(int j = 0; j < equation[i].length; j++) {
-					System.out.print(equation[i][j] + " ");	
-				}
-				System.out.println("\t" + finalVars[i]);
-			}
-		};
-		return equation;
+		return finalVars;
 	}
 }
