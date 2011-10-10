@@ -13,18 +13,22 @@ public class Computer {
 	protected Fraction result;
 	
 	public Computer() {
-		int[] arg = {1, 2}; 												//this is temporary. delete this code.
+		int[] arg = {1, 2, -2}; 												//this is temporary. delete this code.
+		final int variables = 3;
+		final int rows = 2;
 		
-		this.table = new Fraction[2][];
-		for(int i = 0; i < 2; i++){ 										//this is temporary. delete this code
-			this.table[i] = new Fraction[2];
-			for(int j = 0; j < 2; j++) {
+		this.table = new Fraction[rows][];
+		for(int i = 0; i < rows; i++){ 										//this is temporary. delete this code
+			this.table[i] = new Fraction[variables];
+			for(int j = 0; j < variables; j++) {
 				this.table[i][j] = new Fraction(0);
 			}
-			this.table[i][i] = new Fraction(1);
 		}
+		this.table[0][0] = new Fraction(1);
+		this.table[1][1] = new Fraction(1);
+//		this.table[2][2] = new Fraction(1);
 		
-		this.freeElems = new Fraction[table[0].length]; 					//this is temporary. delete this code
+		this.freeElems = new Fraction[table.length]; 					//this is temporary. delete this code
 		for(int i = 0; i < freeElems.length; i++) {
 			this.freeElems[i] = new Fraction(1);
 		}
@@ -63,9 +67,9 @@ public class Computer {
 	}
 	
 	public Fraction[] initMarks(Fraction[][] table, Fraction[] arguments, int[] basis) {
-		marks = new Fraction[table.length];
+		marks = new Fraction[table[0].length];
 		//lets make all marks = 0
-		for(int i = 0; i < table.length; i++) {
+		for(int i = 0; i < marks.length; i++) {
 			marks[i] = new Fraction(0);
 		}
 		
