@@ -6,6 +6,7 @@ package my.datatypes;
 public class Fraction {
 	protected int numerator;
 	protected int denominator;
+	protected final int e = 10000;
 	
 	public int Numerator() {
 		return numerator;
@@ -23,6 +24,12 @@ public class Fraction {
 	public Fraction(int numerator) {
 		this.numerator = numerator;
 		this.denominator = 1;
+	}
+	
+	public Fraction(float numerator) {
+		Fraction tmp = SimplifyFraction(new Fraction((int)(numerator * e), e));
+		this.denominator = tmp.denominator;
+		this.numerator = tmp.numerator;
 	}
 	
 	public static int EuclidGCD(int first, int second) {
@@ -57,16 +64,16 @@ public class Fraction {
 		return addFraction(term);
 	}
 	
-	public static Fraction SubtractFractions(Fraction first, Fraction second) {
+	public static Fraction SubstractFractions(Fraction first, Fraction second) {
 		int numerator, denominator;
 		denominator = findCommonDenominator(first, second);
 		numerator = denominator * (first.numerator - second.numerator);
 		return SimplifyFraction(new Fraction(numerator, denominator));
 	}
 	
-	public static Fraction SubtractFractions(Fraction first, int num) {
+	public static Fraction SubstractFractions(Fraction first, int num) {
 		Fraction second = new Fraction(num);
-		return SubtractFractions(first, second);
+		return SubstractFractions(first, second);
 	}
 	
 	public Fraction subtractFraction(Fraction term) {
