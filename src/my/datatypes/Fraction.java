@@ -139,6 +139,25 @@ public class Fraction {
 		return fractionCompare(term);
 	}
 	
+	public static Fraction[][] IntegerMatrixTranslate(int[][] matrix) {
+		Fraction[][] result = new Fraction[matrix.length][];
+		for(int i = 0; i < result.length; i++) {
+			result[i] = new Fraction[matrix[i].length];
+			for(int j = 0; j < result[i].length; j++) {
+				result[i][j] = new Fraction(matrix[i][j]);
+			}
+		}
+		return result;
+	}
+	
+	public static Fraction[] IntegerArrayTranslate(int[] array) {
+		Fraction[] result = new Fraction[array.length];
+		for(int i = 0; i < result.length; i++) {
+			result[i] = new Fraction(array[i]);
+		}
+		return result;
+	}
+	
 	/**
 	 * @param
 	 * @param second

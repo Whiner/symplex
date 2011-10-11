@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import my.datatypes.Fraction;
 
 /**
@@ -12,33 +15,11 @@ public class Computer {
 	protected int[] basis; //holds the indexes of basis variables. basis[1] can be x6, the basis variable of <second> row is <6>
 	protected Fraction result;
 	
-	public Computer() {
-		int[] arg = {1, 2, -2}; 												//this is temporary. delete this code.
-		final int variables = 3;
-		final int rows = 2;
-		
-		this.table = new Fraction[rows][];
-		for(int i = 0; i < rows; i++){ 										//this is temporary. delete this code
-			this.table[i] = new Fraction[variables];
-			for(int j = 0; j < variables; j++) {
-				this.table[i][j] = new Fraction(0);
-			}
-		}
-		this.table[0][0] = new Fraction(1);
-		this.table[1][1] = new Fraction(1);
-//		this.table[2][2] = new Fraction(1);
-		
-		this.freeElems = new Fraction[table.length]; 					//this is temporary. delete this code
-		for(int i = 0; i < freeElems.length; i++) {
-			this.freeElems[i] = new Fraction(1);
-		}
-		
-		this.arguments = new Fraction[arg.length];
-		for(int i = 0; i < arg.length; i++) {
-			this.arguments[i] = new Fraction(arg[i]);
-		}
-		
-		marks = new Fraction[arg.length];
+	public Computer() throws FileNotFoundException, IOException {
+			Loader instance = new Loader("E:\\text.txt");
+			this.table = Fraction.IntegerMatrixTranslate(instance.Equation());
+			this.arguments = Fraction.IntegerArrayTranslate(instance.Function());
+			this.freeElems = Fraction.IntegerArrayTranslate(instance.FinalVars());
 	}
 	
 	public int[] initBasis(Fraction[][] table) {
