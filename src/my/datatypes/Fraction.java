@@ -110,7 +110,10 @@ public class Fraction {
 	public Fraction multiplyFraction(Fraction term) {
 		this.numerator = this.numerator * term.numerator;
 		this.denominator = this.denominator * term.denominator;
-		return SimplifyFraction(this);
+		Fraction tmp = SimplifyFraction(this);
+		this.numerator = tmp.numerator;
+		this.denominator = tmp.denominator;
+		return this;
 	}
 	
 	public Fraction multiplyFraction(int num) {

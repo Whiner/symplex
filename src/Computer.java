@@ -83,7 +83,14 @@ public class Computer {
 		return this.result;
 	}
 
-	public void Step() {
+	public boolean Step() {
+		if(isOver(marks)) {
+			return true;
+		}
+		if(isBroken(table, marks)) {
+			return false;
+		}
+		
 		int col = maxMark(marks);
 		int row = minDivision(table, freeElems, col);
 
@@ -92,7 +99,9 @@ public class Computer {
 		for(int i = 0; i < table[row].length; i++) {
 			table[row][i].divideFraction(elem);
 		}
+		freeElems[row].divideFraction(elem);
 		
+		//rebuild freeElems and the table
 		for(int i = 0; i < table.length; i++) {
 			if(i == row) 
 				continue;
@@ -101,16 +110,55 @@ public class Computer {
 				elem = Fraction.MultiplyFractions(table[row][j], term);
 				table[i][j].addFraction(elem);
 			}
+			//rebuild freeElems
+			elem = Fraction.MultiplyFractions(freeElems[row], term);
+			freeElems[i].addFraction(elem);
 		}
 		
-		System.out.println();
-		System.out.println();
-		for(int i = 0; i < table.length; i++) {
-			for(int j = 0; j < table[i].length; j++) {
-				System.out.print(table[i][j].Numerator() + "/" + table[i][j].Denominator() + "\t");
-			}
-			System.out.println();
+		//rebuild marks
+		Fraction term = Fraction.MultiplyFractions(marks[col], new Fraction(-1));
+		for(int i = 0; i < marks.length; i++) {
+			elem = Fraction.MultiplyFractions(table[row][i], term);
+			marks[i].addFraction(elem);
 		}
+		//rebuild result
+		elem = Fraction.MultiplyFractions(freeElems[row], term);
+		result.addFraction(elem);
+		//rebuild basis
+		basis[row] = col;
+		
+		First.Print(table, marks, freeElems, basis, result);
+		Step();
+		return false;
+	}
+	
+	protected boolean isOver(Fraction[] marks) {
+		boolean isOver = true;
+		for(Fraction val: marks) {
+			if(val.isPositive()) {
+				isOver = false;
+			}
+		}
+		return isOver;
+	}
+	
+	protected boolean isBroken(Fraction[][] table, Fraction[] marks) {
+		boolean isBroken = true;
+		for(int i = 0; i < marks.length; i++){
+			if(!marks[i].isPositive())
+				continue;
+			isBroken = true;
+			for(int j = 0; j < table.length; j++) {
+				if(table[j][i].isPositive()) {
+					isBroken = false;
+					break;
+				}
+			}
+			if(isBroken) {
+				break;
+			}
+		}
+		return isBroken;
 	}
 	
 	protected int maxMark(Fraction[] input) {
@@ -138,4 +186,5 @@ public class Computer {
 		}
 		return minI;
 	}
+	
 }
