@@ -11,10 +11,6 @@ public class First {
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Computer first = new Computer();
-		int[] basis = first.initBasis(first.table);
-		Fraction[] marks = first.initMarks(first.table, first.arguments, basis);
-		Fraction result = first.initResult(first.freeElems, first.arguments, basis);
-		
 		System.out.print(" \t");
 		for(int i = 0; i < first.arguments.length; i++) {
 			System.out.print(first.arguments[i].Numerator() + "\t");
