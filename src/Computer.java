@@ -17,7 +17,7 @@ public class Computer {
 	private final int M = 1000;
 	
 	public Computer() throws FileNotFoundException, IOException {
-			Loader instance = new Loader("E:\\text.txt");
+			Loader instance = new Loader("input.txt");
 			//initial data
 			this.table = Fraction.IntegerMatrixTranslate(instance.Equation());
 			this.arguments = Fraction.IntegerArrayTranslate(instance.Function());
