@@ -32,6 +32,11 @@ public class Fraction {
 		this.numerator = tmp.numerator;
 	}
 	
+	public Fraction(Fraction term) {
+		this.numerator = term.numerator;
+		this.denominator = term.denominator;
+	}
+	
 	public static int EuclidGCD(int first, int second) {
 		while(second != 0) {
 			int r = first % second;
@@ -44,7 +49,7 @@ public class Fraction {
 	public static Fraction AddFractions(Fraction first, Fraction second) {
 		int numerator, denominator;
 		denominator = findCommonDenominator(first, second);
-		numerator = denominator * (first.numerator + second.numerator);
+		numerator = first.numerator * denominator/first.denominator + second.numerator * denominator/second.denominator;
 		return SimplifyFraction(new Fraction(numerator, denominator));
 	}
 	
@@ -54,9 +59,13 @@ public class Fraction {
 	}
 	
 	public Fraction addFraction(Fraction term) {
-		this.denominator = findCommonDenominator(this, term);
-		this.numerator = this.denominator * (this.numerator + term.numerator);
-		return SimplifyFraction(this);
+		int numerator, denominator;
+		denominator = findCommonDenominator(this, term);
+		numerator = this.numerator * denominator/this.denominator + term.numerator * denominator/term.denominator;
+		Fraction tmp = SimplifyFraction(new Fraction(numerator, denominator));
+		this.numerator = tmp.numerator;
+		this.denominator = tmp.denominator;
+		return this;
 	}
 	
 	public Fraction addFraction(int num) {
@@ -67,7 +76,7 @@ public class Fraction {
 	public static Fraction SubstractFractions(Fraction first, Fraction second) {
 		int numerator, denominator;
 		denominator = findCommonDenominator(first, second);
-		numerator = denominator * (first.numerator - second.numerator);
+		numerator = first.numerator * denominator/first.denominator - second.numerator * denominator/second.denominator;
 		return SimplifyFraction(new Fraction(numerator, denominator));
 	}
 	
@@ -77,13 +86,17 @@ public class Fraction {
 	}
 	
 	public Fraction subtractFraction(Fraction term) {
-		this.denominator = this.denominator * term.denominator;
-		this.numerator = this.denominator * (this.numerator - term.numerator);
-		return SimplifyFraction(this);
+		int numerator, denominator;
+		denominator = findCommonDenominator(this, term);
+		numerator = this.numerator * denominator/this.denominator - term.numerator * denominator/term.denominator;
+		Fraction tmp = SimplifyFraction(new Fraction(numerator, denominator));
+		this.numerator = tmp.numerator;
+		this.denominator = tmp.denominator;
+		return this;
 	}
 	
 	public Fraction subtractFraction(int num) {
-		Fraction term = new Fraction(num);
+		Fraction term = new Fraction(num); 
 		return subtractFraction(term);
 	}
 	
@@ -139,6 +152,26 @@ public class Fraction {
 		return fractionCompare(term);
 	}
 	
+	public static boolean GreaterEquals(Fraction first, Fraction second) {
+		int commonDenominator = findCommonDenominator(first, second);
+		int a = commonDenominator / first.denominator * first.numerator;
+		int b  = commonDenominator / second.denominator * second.numerator;
+		return (a >= b)?(true):(false);
+		
+	}
+	
+	public boolean greaterEquals(Fraction term) {
+		return GreaterEquals(this, term);
+	}
+	
+	public static boolean Less(Fraction first, Fraction second) {
+		return !GreaterEquals(first, second);
+	}
+	
+	public boolean less(Fraction term) {
+		return !greaterEquals(term);
+	}
+	
 	public static Fraction[][] IntegerMatrixTranslate(int[][] matrix) {
 		Fraction[][] result = new Fraction[matrix.length][];
 		for(int i = 0; i < result.length; i++) {
@@ -158,6 +191,13 @@ public class Fraction {
 		return result;
 	}
 	
+	public boolean isPositive() {
+		if(this.numerator > 0 && this.denominator > 0) {
+			return true;
+		}
+		else return false;
+	}
+	
 	/**
 	 * @param
 	 * @param second
@@ -174,8 +214,13 @@ public class Fraction {
 	
 	public static Fraction SimplifyFraction(Fraction main) {
 		int simplifyer = EuclidGCD(main.numerator, main.denominator);
-		main.denominator /= simplifyer;
-		main.numerator /= simplifyer;
-		return main;
+		int denominator = main.denominator / simplifyer;
+		int numerator = main.numerator / simplifyer;
+		if(numerator < 0 && denominator < 0 || numerator > 0 && denominator < 0) {
+			numerator *= -1;
+			denominator *= -1;
+		}
+		
+		return new Fraction(numerator, denominator);
 	}
 }

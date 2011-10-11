@@ -14,15 +14,20 @@ public class Computer {
 	protected Fraction[] freeElems;
 	protected int[] basis; //holds the indexes of basis variables. basis[1] can be x6, the basis variable of <second> row is <6>
 	protected Fraction result;
+	private final int M = 1000;
 	
 	public Computer() throws FileNotFoundException, IOException {
 			Loader instance = new Loader("E:\\text.txt");
+			//initial data
 			this.table = Fraction.IntegerMatrixTranslate(instance.Equation());
 			this.arguments = Fraction.IntegerArrayTranslate(instance.Function());
 			this.freeElems = Fraction.IntegerArrayTranslate(instance.FinalVars());
+			this.basis = initBasis(this.table);
+			this.marks = initMarks(this.table, this.arguments, this.basis);
+			this.result = initResult(this.freeElems, this.arguments, this.basis);
 	}
 	
-	public int[] initBasis(Fraction[][] table) {
+	protected int[] initBasis(Fraction[][] table) {
 		basis = new int[table.length];
 		for(int i = 0; i < table.length; i++) {
 			for(int j = 0; j < table[i].length; j++) {
@@ -47,7 +52,7 @@ public class Computer {
 		return this.basis;
 	}
 	
-	public Fraction[] initMarks(Fraction[][] table, Fraction[] arguments, int[] basis) {
+	protected Fraction[] initMarks(Fraction[][] table, Fraction[] arguments, int[] basis) {
 		marks = new Fraction[table[0].length];
 		//lets make all marks = 0
 		for(int i = 0; i < marks.length; i++) {
@@ -70,11 +75,67 @@ public class Computer {
 		return this.marks;
 	}
 	
-	public Fraction initResult(Fraction[] freeElems, Fraction[] arguments, int[] basis) {
+	protected Fraction initResult(Fraction[] freeElems, Fraction[] arguments, int[] basis) {
 		result = new Fraction(0); //set result to 0
 		for(int i = 0; i < freeElems.length; i++) {
 			result.addFraction(Fraction.MultiplyFractions(freeElems[i], arguments[basis[i]]));
 		}
 		return this.result;
+	}
+
+	public void Step() {
+		int col = maxMark(marks);
+		int row = minDivision(table, freeElems, col);
+
+		//table[row][col] - is the element;
+		Fraction elem = new Fraction(table[row][col]);
+		for(int i = 0; i < table[row].length; i++) {
+			table[row][i].divideFraction(elem);
+		}
+		
+		for(int i = 0; i < table.length; i++) {
+			if(i == row) 
+				continue;
+			Fraction term = Fraction.MultiplyFractions(table[i][col], new Fraction(-1));
+			for(int j = 0; j < table[i].length; j++) {
+				elem = Fraction.MultiplyFractions(table[row][j], term);
+				table[i][j].addFraction(elem);
+			}
+		}
+		
+		System.out.println();
+		System.out.println();
+		for(int i = 0; i < table.length; i++) {
+			for(int j = 0; j < table[i].length; j++) {
+				System.out.print(table[i][j].Numerator() + "/" + table[i][j].Denominator() + "\t");
+			}
+			System.out.println();
+		}
+	}
+	
+	protected int maxMark(Fraction[] input) {
+		Fraction max = new Fraction(input[0]);
+		int maxI = 0;
+		for(int i = 1; i < input.length; i++) {
+			if(Fraction.GreaterEquals(input[i], max)) {
+				max = new Fraction(input[i]);
+				maxI = i;
+			}
+		}
+		return maxI;
+	}
+	
+	protected int minDivision(Fraction[][] input, Fraction[] freeElems, int col) {
+		int minI = 0;
+		Fraction min = new Fraction(M);
+		for(int i = 0; i < freeElems.length; i++) {
+			if(input[i][col].isPositive()) {
+				if(Fraction.DivideFractions(freeElems[i], input[i][col]).less(min)) {
+					min = new Fraction(Fraction.DivideFractions(freeElems[i], input[i][col]));
+					minI = i;
+				}
+			}
+		}
+		return minI;
 	}
 }

@@ -9,7 +9,7 @@ public class First {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) throws FileNotFoundException, IOException {		
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Computer first = new Computer();
 		int[] basis = first.initBasis(first.table);
 		Fraction[] marks = first.initMarks(first.table, first.arguments, basis);
@@ -24,7 +24,7 @@ public class First {
 		for(int i = 0; i < first.table.length; i++) {
 			System.out.print(basis[i] + "\t");
 			for(int j = 0; j < first.table[i].length; j++) {
-				System.out.print(first.table[i][j].Numerator() + " ");
+				System.out.print(first.table[i][j].Numerator() + "/" + first.table[i][j].Denominator() + "\t");
 			}
 			System.out.print("\t" + first.freeElems[i].Numerator());
 			System.out.println();
@@ -35,5 +35,7 @@ public class First {
 			System.out.print(marks[i].Numerator() + " ");
 		}
 		System.out.print("\t" + result.Numerator());
+		
+		first.Step();
 	}
 }
