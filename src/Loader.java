@@ -44,8 +44,10 @@ public class Loader {
 		while (true) {
 		//	System.out.println(count+": "+line);
 			line = bufRead.readLine();
-			if(line == null || line == "")
+			if(line == null)
 				break;
+			if(line == "") 
+				continue;
 			String[] res = line.split("\t");
 			rows.add(res[0]);
 			finals.add(res[1]);
@@ -58,10 +60,12 @@ public class Loader {
 	
 	protected int[] setFunction(String line) {
 		String[] functionLine = line.split(" ");
+		functionLine = clearEmpty(functionLine);
 		int[] function = new int[functionLine.length];
 		for(int i = 0; i < function.length; i++) {
 			functionLine[i] = functionLine[i].trim();
-			function[i] = Integer.parseInt(functionLine[i]);
+			if(!functionLine[i].isEmpty())
+				function[i] = Integer.parseInt(functionLine[i]);
 		}
 		return function;
 	}
@@ -72,9 +76,11 @@ public class Loader {
 		equations = new int[equationString.length][];
 		for(int i = 0; i < equationString.length; i++) {
 			String[] tmp = equationString[i].split(" ");
+			tmp = clearEmpty(tmp);
 			equations[i] = new int[tmp.length];
-			for(int j = 0; j < equations.length; j++) {
-				equations[i][j] = Integer.parseInt(tmp[j]);	
+			for(int j = 0; j < equations[i].length; j++) {
+				if(!tmp[j].isEmpty())
+					equations[i][j] = Integer.parseInt(tmp[j]);	
 			}
 		}
 		return equations;
@@ -82,11 +88,23 @@ public class Loader {
 	
 	protected int[] setFinalVars(ArrayList<String> finals) {
 		int[] finalVars;
-		String[] vars = finals.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");;
+		String[] vars = finals.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");
+		vars = clearEmpty(vars);
 		finalVars = new int[vars.length];
 		for(int i = 0; i < finalVars.length; i++) {
-			finalVars[i] = Integer.parseInt(vars[i]);
+			if(!vars[i].isEmpty())
+				finalVars[i] = Integer.parseInt(vars[i]);
 		}
 		return finalVars;
+	}
+	
+	protected String[] clearEmpty(String[] broken) {
+		ArrayList<String> fixed = new ArrayList<String>();
+		for(int i = 0; i < broken.length; i++) {
+			if(!broken[i].isEmpty()) {
+				fixed.add(broken[i]);
+			}
+		}
+		return fixed.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");
 	}
 }
