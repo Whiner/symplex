@@ -53,7 +53,6 @@ public class Loader {
 			finals.add(res[1]);
 		}
 		
-		//the worst code ever. need to optimize
 		this.equation = setEquations(rows);
 		this.finalVars = setFinalVars(finals);
 	}
@@ -72,28 +71,31 @@ public class Loader {
 	
 	protected int[][] setEquations(ArrayList<String> rows) {
 		int[][] equations;
-		String[] equationString = rows.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");
+		String[] equationString = new String[rows.size()];
+		int i = 0;
+		for(String val: rows) {
+			equationString[i] = val;
+			i++;
+		}
+		
 		equations = new int[equationString.length][];
-		for(int i = 0; i < equationString.length; i++) {
+		for(i = 0; i < equationString.length; i++) {
 			String[] tmp = equationString[i].split(" ");
 			tmp = clearEmpty(tmp);
 			equations[i] = new int[tmp.length];
 			for(int j = 0; j < equations[i].length; j++) {
-				if(!tmp[j].isEmpty())
-					equations[i][j] = Integer.parseInt(tmp[j]);	
+				equations[i][j] = Integer.parseInt(tmp[j]);
 			}
 		}
+
 		return equations;
 	}
 	
 	protected int[] setFinalVars(ArrayList<String> finals) {
-		int[] finalVars;
-		String[] vars = finals.toString().replace("[", "").replace("]", "").replace(",", "\n").split("\n ");
-		vars = clearEmpty(vars);
-		finalVars = new int[vars.length];
-		for(int i = 0; i < finalVars.length; i++) {
-			if(!vars[i].isEmpty())
-				finalVars[i] = Integer.parseInt(vars[i]);
+		int[] finalVars = new int[finals.size()];
+		int i = 0;
+		for(String a: finals) {
+			finalVars[i] = Integer.parseInt(a);
 		}
 		return finalVars;
 	}
