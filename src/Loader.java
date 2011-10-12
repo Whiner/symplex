@@ -96,6 +96,7 @@ public class Loader {
 		int i = 0;
 		for(String a: finals) {
 			finalVars[i] = Integer.parseInt(a);
+			i++;
 		}
 		return finalVars;
 	}
