@@ -128,8 +128,7 @@ public class Computer {
 		basis[row] = col;
 		
 		First.Print(table, marks, freeElems, basis, result);
-		Step();
-		return false;
+		return Step();
 	}
 	
 	protected boolean isOver(Fraction[] marks) {
