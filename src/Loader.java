@@ -46,8 +46,6 @@ public class Loader {
 			line = bufRead.readLine();
 			if(line == null)
 				break;
-			if(line == "") 
-				continue;
 			String[] res = line.split("\t");
 			rows.add(res[0]);
 			finals.add(res[1]);
